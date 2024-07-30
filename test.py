@@ -1,15 +1,14 @@
-import requests
+from ftplib import FTP
 
-def check_server_status(url):
+def check_ftp_server_status(host):
     try:
-        response = requests.get(url)
-        if response.status_code == 200:
-            return "Server is up"
-        else:
-            return f"Server returned status code: {response.status_code}"
-    except requests.ConnectionError:
-        return "Server is down"
+        ftp = FTP(host)
+        ftp.login()
+        ftp.quit()
+        return f"FTP server {host} is up"
+    except Exception as e:
+        return f"Failed to connect to FTP server: {e}"
 
-url = "ftp.cisco.com"
-status = check_server_status(url)
+host = "ftp.scene.org"
+status = check_ftp_server_status(host)
 print(status)
